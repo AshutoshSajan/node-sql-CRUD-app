@@ -133,11 +133,29 @@ app.get('/getposts', (req, res) => {
 app.get('/get-data', (req, res) => {
     console.log("get posts..........................................");
 
-    var sql = 'SELECT id json_extract(names) FROM names_array';
+    // var sql = 'SELECT id json_extract(names) FROM names_array';
+    var sql = 'SELECT * FROM names_array';
+
     let query = db.query(sql, (err, result) => {
         if (err) throw err;
-        console.log(result);
-        res.status(200).json(result);
+        console.log(result, "<== names array...");
+        var names = JSON.parse(result[0].names);
+        res.status(200).json(names);
+
+        // res.status(200).send({ data: result, "msg": "post fetched..." });
+    })
+})
+
+app.get('/get-persons', (req, res) => {
+
+    var sql = 'SELECT * FROM person';
+    let query = db.query(sql, (err, result) => {
+        if (err) throw err;
+
+        console.log(result[0].user, "<==");
+        var user = JSON.parse(result[0].user);
+
+        res.status(200).json(user);
 
         // res.status(200).send({ data: result, "msg": "post fetched..." });
     })
@@ -273,12 +291,31 @@ app.listen(3000, (err) => {
 
 var names = ['sam', 'jack', 'jhon', 'mike'];
 
+var user = {
+    name: 'sam',
+    age:25,
+    email: "admin@gmail.com",
+    password: "12345qwerty",
+    gender: "male"
+}
+
+//to create a table
 'CREATE TABLE names_array (id int AUTO_INCREMENT, names JSON, PRIMARY KEY(id))';
 
+'CREATE TABLE person (id int AUTO_INCREMENT, names JSON, PRIMARY KEY(id))';
+
+
+// to insert array in a table
 `INSERT INTO names_array (names) values ('["sam", "jack", "jhon", "mike"]')`;
 
+//to insert data in a table
 'INSERT INTO users ( name , email, password, age, country, city, profession, gender, maritalStatus, language) values ("sam db test", "samdb@.com", "qwer1231",22, "india", "kangra", "dev", "male", "single", "hindiiii")';
 
-//drop table;
-
+//to drop table;
 'DROP TABLE table_name';
+
+// to get an object from table
+// `SELECT * FROM names_array WHERE JSON_CONTAINS(name, '["name1"]')`;
+
+// to insert an object
+`INSERT INTO person (user) VALUES ('{"name":"sam", "age": "25", "email": "admin@gmail.com", "password": "12345qwerty","gender": "male"}')`;
