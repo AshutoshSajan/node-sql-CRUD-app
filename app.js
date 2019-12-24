@@ -20,6 +20,7 @@ db.connect(err => {
 var app = express();
 
 
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
@@ -53,6 +54,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/users/register', (req,res) => {
     res.render('register');
 })
+
+// console.log(
+    app.get("/check", (req,res, next) => {
+        console.log(req, "res", "next", "..............")
+    } );
+// , "app.........");
+
 
 // app.post('/users/register', (req,res) => {
 //     console.log(req.body, "user register data.............................");
@@ -122,6 +130,19 @@ app.get('/getposts', (req, res) => {
     })
 })
 
+app.get('/get-data', (req, res) => {
+    console.log("get posts..........................................");
+
+    var sql = 'SELECT id json_extract(names) FROM names_array';
+    let query = db.query(sql, (err, result) => {
+        if (err) throw err;
+        console.log(result);
+        res.status(200).json(result);
+
+        // res.status(200).send({ data: result, "msg": "post fetched..." });
+    })
+})
+
 //create table
 // app.get('/users/create-table', (req, res) => {
 //     var sql = 'CREATE TABLE users(id int AUTO_INCREMENT, name VARCHAR(255), email VARCHAR(255), password VARCHAR(255), age int, country VARCHAR(255), city VARCHAR(255), profession VARCHAR(255),gender VARCHAR(255), marital-status VARCHAR(255), language VARCHAR(255), PRIMARY KEY(id))';
@@ -168,16 +189,13 @@ app.post('/users/register', (req, res) => {
     });
 });
 
+/*
+    to select specific recordes
+    select id, name, email, age from users;
 
-```
-
-to select specific recordes
-select id, name, email, age from users;
-
-// from a particular record
-select id, name, email, age from users where id= "document id";
-
-```
+    from a particular record
+    select id, name, email, age from users where id= "document id";
+*/
 
 //get single user
 app.get('/users/:id', (req, res) => {
@@ -251,3 +269,12 @@ app.listen(3000, (err) => {
         console.log("server started at port 3000..................");
     }
 })
+
+
+var names = ['sam', 'jack', 'jhon', 'mike'];
+
+'CREATE TABLE names_array (id int AUTO_INCREMENT, names JSON, PRIMARY KEY(id))';
+
+`INSERT INTO names_array (names) values ('["sam", "jack", "jhon", "mike"]')`;
+
+'INSERT INTO users ( name , email, password, age, country, city, profession, gender, maritalStatus, language) values ("sam db test", "samdb@.com", "qwer1231",22, "india", "kangra", "dev", "male", "single", "hindiiii")';
