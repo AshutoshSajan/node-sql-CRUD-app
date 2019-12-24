@@ -278,3 +278,7 @@ var names = ['sam', 'jack', 'jhon', 'mike'];
 `INSERT INTO names_array (names) values ('["sam", "jack", "jhon", "mike"]')`;
 
 'INSERT INTO users ( name , email, password, age, country, city, profession, gender, maritalStatus, language) values ("sam db test", "samdb@.com", "qwer1231",22, "india", "kangra", "dev", "male", "single", "hindiiii")';
+
+//drop table;
+
+'DROP TABLE table_name';
